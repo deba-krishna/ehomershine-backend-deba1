@@ -8,9 +8,7 @@ const cors = require('cors');
 
 const uploadRoutes = require('./upload');
 const downloadRoutes = require('./download');
-// If your file is named product.js use './product'
-// If it's products.js use './products'
-const productsRoutes = require('./product');
+const productsRoutes = require('./products'); // <-- matches your file BACKEND/products.js
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,19 +17,21 @@ const PORT = process.env.PORT || 3000;
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || '*';
 app.use(cors({
   origin: FRONTEND_ORIGIN,
-  methods: ['GET', 'POST', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'x-admin-secret', 'Authorization']
 }));
 
+// Increase body parser limits to accept large base64 uploads
 app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
-// Mount API routes under /api
-app.use('/api/upload', uploadRoutes); // upload routes listen under /api/upload
-app.use('/api/download', downloadRoutes); // download routes listen under /api/download
-app.use('/api/products', productsRoutes); // products routes listen under /api/products
+// Mount API routes
+// Note: each file's routes are defined with local paths (e.g. in products.js routes use '/products' etc).
+app.use('/api/upload', uploadRoutes);
+app.use('/api/download', downloadRoutes);
+app.use('/api', productsRoutes); // productsRoutes already defines /products and /products/:id etc
 
-// basic root / health
+// Health check
 app.get('/', (req, res) => {
   res.json({ status: 'ehomershine backend up', environment: process.env.NODE_ENV || 'development' });
 });
