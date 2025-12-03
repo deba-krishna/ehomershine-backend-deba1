@@ -2,10 +2,10 @@
   "name": "ehomershine-backend",
   "version": "1.0.0",
   "description": "Backend for eHomerShine — Supabase storage + signed URLs + uploads",
-  "main": "server.js",
+  "main": "BACKEND/server.js",
   "scripts": {
-    "start": "node server.js",
-    "start:dev": "nodemon server.js"
+    "start": "node BACKEND/server.js",
+    "start:dev": "nodemon BACKEND/server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.28.0",
