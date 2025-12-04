@@ -6,39 +6,44 @@
   <meta name="description" content="Premium emotional code marketplace - Romantic web templates & components" />
   <title>Emotional Code Marketplace | Premium Romantic Templates</title>
 
-  <!-- stylesheet (you provided) -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- small config available to JS (backend base URL) -->
+  <!-- FRONTEND CONFIG -->
   <script>
-    // FRONTEND CONFIG - update here if backend URL changes
     window.EC_CONFIG = {
       BACKEND_BASE: "https://ehomershine-backend-deba1-13.onrender.com",
-      API_PRODUCT_ENDPOINT: "/api/product",     // backend path for single product API if used
-      API_PRODUCTS_ENDPOINT: "/api/products"    // backend path for products list
+      API_PRODUCTS_ENDPOINT: "/api/products"
+      /* NOTE:
+         Your backend does NOT have `/api/product`.
+         It only has:
+         - GET /api/products
+         - GET /api/products/:id
+         - PUT/DELETE same path for admin
+         So we removed API_PRODUCT_ENDPOINT to avoid errors.
+      */
     };
   </script>
 
-  <!-- favicon -->
   <link rel="icon" href="https://via.placeholder.com/32x32/FFB6C1/ffffff?text=♥" />
 </head>
+
 <body class="light-theme">
 
-  <!-- sparkles (visual) -->
-  <div class="sparkles-container" aria-hidden="true">
+  <!-- Sparkles -->
+  <div class="sparkles-container">
     <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
     <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
     <div class="sparkle"></div><div class="sparkle"></div>
   </div>
 
-  <!-- theme toggle -->
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+  <!-- Toggle theme -->
+  <button id="themeToggle" class="theme-toggle">
     <span class="theme-icon sun-icon">☀️</span>
     <span class="theme-icon moon-icon">🌙</span>
   </button>
 
   <!-- HERO -->
-  <header class="hero" id="hero">
+  <header class="hero">
     <div class="hero-content">
       <div class="hero-text">
         <h1 class="hero-headline">
@@ -46,57 +51,64 @@
           <span class="gradient-text">Into Beautiful Reality</span>
         </h1>
         <p class="hero-subtext">
-          Premium romantic web templates crafted with love — proposals, anniversaries and heartfelt web experiences.
+          Beautiful romantic web templates crafted with love — proposals, birthdays,
+          anniversaries, and heartfelt digital moments.
         </p>
+
         <div class="hero-cta-group">
-          <button class="btn btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Templates</button>
+          <button class="btn btn-primary"
+            onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+            Explore Templates
+          </button>
+
           <button class="btn btn-secondary" onclick="openChat()">Get Custom Design</button>
         </div>
       </div>
 
       <div class="hero-illustration">
-        <img src="https://via.placeholder.com/600x500/FFE5EC/FFB6C1?text=♥+Romantic+Designs" alt="Hero illustration" loading="eager">
+        <img src="https://via.placeholder.com/600x500/FFE5EC/FFB6C1?text=♥+Romantic+Designs" alt="">
       </div>
     </div>
   </header>
 
-  <!-- MAIN GRID -->
+  <!-- MAIN LAYOUT -->
   <div class="main-container">
 
     <!-- SIDEBAR -->
-    <aside class="seller-sidebar" id="sellerSidebar">
-      <div class="seller-card" role="region" aria-label="Seller information">
+    <aside class="seller-sidebar">
+      <div class="seller-card">
         <div class="seller-avatar">
-          <img src="https://via.placeholder.com/120x120/E6B8FF/ffffff?text=Seller" alt="Seller avatar">
-          <div class="online-badge" aria-hidden="true"></div>
+          <img src="https://via.placeholder.com/120x120/E6B8FF/ffffff?text=ER" alt="">
+          <div class="online-badge"></div>
         </div>
-        <h2 class="seller-name">Emma Rose</h2>
-        <p class="seller-bio">Crafting digital love stories through code ✨ Specialized in romantic web experiences</p>
 
-        <div class="seller-stats" aria-hidden="false">
+        <h2 class="seller-name">Emma Rose</h2>
+        <p class="seller-bio">Crafting digital love stories through code ✨</p>
+
+        <div class="seller-stats">
           <div class="stat-item"><div class="stat-icon">⭐</div><div class="stat-info"><div class="stat-value">4.9</div><div class="stat-label">Rating</div></div></div>
           <div class="stat-item"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value">2.4K</div><div class="stat-label">Followers</div></div></div>
           <div class="stat-item"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-value">856</div><div class="stat-label">Orders</div></div></div>
         </div>
 
         <div class="seller-socials">
-          <a class="social-link" href="https://instagram.com" target="_blank" rel="noopener">📷 Instagram</a>
-          <a class="social-link" href="https://wa.me/1234567890" target="_blank" rel="noopener">💬 WhatsApp</a>
+          <a class="social-link" href="https://instagram.com" target="_blank">📷 Instagram</a>
+          <a class="social-link" href="https://wa.me/1234567890" target="_blank">💬 WhatsApp</a>
         </div>
       </div>
     </aside>
 
-    <!-- PRODUCTS -->
-    <main class="products-section" id="products" role="main">
+    <!-- PRODUCTS SECTION -->
+    <main class="products-section" id="products">
 
-      <!-- controls -->
-      <div class="controls-bar" role="search">
-        <div class="search-box" aria-label="Search templates">
-          <input id="searchInput" type="search" placeholder="Search templates..." aria-label="Search templates">
+      <!-- Search + Sort -->
+      <div class="controls-bar">
+        <div class="search-box">
+          <input id="searchInput" type="search" placeholder="Search templates…">
           <span class="search-icon">🔍</span>
         </div>
 
-        <div class="sort-select" aria-label="Sort options">
+        <div class="sort-select">
           <select id="sortSelect">
             <option value="featured">Featured</option>
             <option value="price-low">Price: Low to High</option>
@@ -106,208 +118,153 @@
         </div>
       </div>
 
-      <!-- chips -->
-      <div class="filter-chips" role="tablist" aria-label="Product categories">
-        <button class="chip active" data-category="all" role="tab" aria-selected="true">All</button>
-        <button class="chip" data-category="proposal" role="tab" aria-selected="false">Proposal</button>
-        <button class="chip" data-category="anniversary" role="tab" aria-selected="false">Anniversary</button>
-        <button class="chip" data-category="birthday" role="tab" aria-selected="false">Birthday</button>
-        <button class="chip" data-category="apology" role="tab" aria-selected="false">Apology</button>
-        <button class="chip" data-category="landing" role="tab" aria-selected="false">Landing Page</button>
-        <button class="chip" data-category="components" role="tab" aria-selected="false">Components</button>
-        <button class="chip" data-category="fullstack" role="tab" aria-selected="false">Full Stack</button>
+      <!-- CATEGORY CHIPS -->
+      <div class="filter-chips" id="categoryChips">
+        <button class="chip active" data-category="all">All</button>
+
+        <button class="chip" data-category="birthday-wishes">Birthday Wishes</button>
+        <button class="chip" data-category="birthday-crush">Birthday Wishes for Crush</button>
+        <button class="chip" data-category="proposal">Proposal</button>
+        <button class="chip" data-category="apology">Apology</button>
+        <button class="chip" data-category="anniversary">Anniversary</button>
+        <button class="chip" data-category="for-girlfriend">For Girlfriend</button>
+        <button class="chip" data-category="for-boyfriend">For Boyfriend</button>
+        <button class="chip" data-category="fathers-day">Father’s Day</button>
+        <button class="chip" data-category="mothers-day">Mother’s Day</button>
+        <button class="chip" data-category="landing-page">Landing Page</button>
+        <button class="chip" data-category="love-letters">Love Letters</button>
+        <button class="chip" data-category="countdown-pages">Countdown Pages</button>
+        <button class="chip" data-category="photo-galleries">Photo Galleries</button>
+        <button class="chip" data-category="frontend-components">Frontend Components Pack</button>
+        <button class="chip" data-category="full-website-kits">Full Website Kits</button>
       </div>
 
-      <!-- grid -->
-      <div id="productGrid" class="product-grid" aria-live="polite">
-        <!-- products inserted by script.js -->
-      </div>
+      <!-- PRODUCT GRID -->
+      <div id="productGrid" class="product-grid"></div>
 
     </main>
   </div>
 
   <!-- Testimonials -->
-  <section class="testimonials-section" aria-label="Testimonials">
+  <section class="testimonials-section">
     <h2 class="section-title">Loved By Creators</h2>
     <div class="testimonials-grid">
       <div class="testimonial-card">
         <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-        <p class="testimonial-text">"The proposal template helped me create the most magical moment. She said yes!"</p>
-        <div class="testimonial-author">
-          <img src="https://via.placeholder.com/50x50/D8B4FE/ffffff?text=M" alt="Michael" loading="lazy">
-          <div><div class="author-name">Michael Chen</div><div class="author-title">Used Proposal Template</div></div>
-        </div>
+        <p>"The proposal template helped me create the most magical moment."</p>
       </div>
       <div class="testimonial-card">
         <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-        <p class="testimonial-text">"Easy to customize and absolutely beautiful. Made our anniversary website in under an hour."</p>
-        <div class="testimonial-author">
-          <img src="https://via.placeholder.com/50x50/FFB6C1/ffffff?text=S" alt="Sarah" loading="lazy">
-          <div><div class="author-name">Sarah Williams</div><div class="author-title">Anniversary Special</div></div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-        <p class="testimonial-text">"Professional quality code with romantic aesthetics. Highly recommended!"</p>
-        <div class="testimonial-author">
-          <img src="https://via.placeholder.com/50x50/FFDAB9/ffffff?text=R" alt="Raj" loading="lazy">
-          <div><div class="author-name">Raj Patel</div><div class="author-title">Developer & Designer</div></div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-        <p class="testimonial-text">"The apology template helped me express feelings I couldn't put into words."</p>
-        <div class="testimonial-author">
-          <img src="https://via.placeholder.com/50x50/E6B8FF/ffffff?text=L" alt="Lisa" loading="lazy">
-          <div><div class="author-name">Lisa Anderson</div><div class="author-title">Heartfelt Moments</div></div>
-        </div>
+        <p>"My anniversary website made my wife cry—so beautiful!"</p>
       </div>
     </div>
   </section>
 
-  <!-- product modal -->
-  <div id="productModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+  <!-- Product Modal -->
+  <div id="productModal" class="modal-backdrop">
     <div class="modal-content">
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+      <button class="modal-close" onclick="closeModal()">×</button>
+
       <div class="modal-body">
         <div class="modal-gallery">
           <div class="gallery-main">
-            <button class="gallery-nav prev" onclick="prevImage()" aria-label="Previous">‹</button>
-            <img id="modalMainImage" src="" alt="Preview">
-            <button class="gallery-nav next" onclick="nextImage()" aria-label="Next">›</button>
+            <button onclick="prevImage()" class="gallery-nav prev">‹</button>
+            <img id="modalMainImage" src="">
+            <button onclick="nextImage()" class="gallery-nav next">›</button>
           </div>
-          <div id="modalThumbnails" class="gallery-thumbnails" aria-hidden="false"></div>
+          <div id="modalThumbnails" class="gallery-thumbnails"></div>
         </div>
 
         <div class="modal-info">
-          <h2 id="modalTitle" class="modal-title"></h2>
+          <h2 id="modalTitle"></h2>
           <div class="modal-price-group">
-            <span id="modalPrice" class="modal-price"></span>
-            <span id="modalOldPrice" class="modal-old-price"></span>
+            <span id="modalPrice"></span>
+            <span id="modalOldPrice"></span>
           </div>
-          <div id="modalTags" class="modal-tags"></div>
-          <div class="modal-description">
-            <h3>What's included:</h3>
-            <ul id="modalIncludes"></ul>
-          </div>
-          <div class="modal-actions">
-            <button class="btn btn-primary btn-large" onclick="addToCartFromModal()">Add to Cart</button>
-            <button class="btn btn-secondary" onclick="window.open(currentProduct && currentProduct.demoUrl ? currentProduct.demoUrl : '#','_blank')">View Demo</button>
-          </div>
+          <div id="modalTags"></div>
+          <ul id="modalIncludes"></ul>
+
+          <button class="btn btn-primary" onclick="addToCartFromModal()">Add to Cart</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- cart drawer -->
-  <div id="cartDrawer" class="cart-drawer" aria-hidden="true">
+  <!-- Cart Drawer -->
+  <div id="cartDrawer" class="cart-drawer">
     <div class="cart-header">
       <h2>Your Cart</h2>
-      <button class="cart-close" onclick="toggleCart()" aria-label="Close cart">×</button>
+      <button onclick="toggleCart()">×</button>
     </div>
-    <div id="cartItems" class="cart-items" aria-live="polite"></div>
-    <div id="cartEmpty" class="cart-empty">
-      <span class="empty-icon">🛒</span>
-      <p>Your cart is empty</p>
-    </div>
+
+    <div id="cartItems"></div>
+    <div id="cartEmpty" class="cart-empty">Your cart is empty</div>
+
     <div id="cartFooter" class="cart-footer">
-      <div class="cart-summary">
-        <div class="summary-row"><span>Subtotal:</span><span id="cartSubtotal">₹0</span></div>
-        <div class="summary-row"><span>Processing Fee (2%):</span><span id="cartFee">₹0</span></div>
-        <div class="summary-row total"><span>Total:</span><span id="cartTotal">₹0</span></div>
-      </div>
-      <button class="btn btn-primary btn-large" onclick="openCheckout()">Proceed to Checkout</button>
+      <div class="summary-row">Subtotal: <span id="cartSubtotal">₹0</span></div>
+      <div class="summary-row">Fee (2%): <span id="cartFee">₹0</span></div>
+      <div class="summary-row total">Total: <span id="cartTotal">₹0</span></div>
+      <button class="btn btn-primary" onclick="openCheckout()">Proceed to Checkout</button>
     </div>
   </div>
 
-  <!-- cart button -->
-  <button id="cartButton" class="cart-button" onclick="toggleCart()" aria-label="Shopping cart">
-    🛒 <span id="cartBadge" class="cart-badge">0</span>
+  <button id="cartButton" class="cart-button" onclick="toggleCart()">
+    🛒 <span id="cartBadge">0</span>
   </button>
 
-  <!-- checkout modal -->
-  <div id="checkoutModal" class="modal-backdrop" role="dialog" aria-modal="true">
+  <!-- Checkout -->
+  <div id="checkoutModal" class="modal-backdrop">
     <div class="modal-content checkout-modal">
-      <button class="modal-close" onclick="closeCheckout()" aria-label="Close checkout">×</button>
-      <h2 id="checkoutTitle" class="modal-title">Complete Your Order</h2>
+      <button onclick="closeCheckout()">×</button>
 
-      <form id="checkoutForm" class="checkout-form" onsubmit="handleCheckout(event)">
-        <div class="form-group">
-          <label for="customerName">Full Name *</label>
-          <input id="customerName" type="text" required placeholder="Your full name">
-        </div>
-        <div class="form-group">
-          <label for="customerPhone">Phone Number *</label>
-          <input id="customerPhone" type="tel" required placeholder="+91 XXXXX XXXXX">
-        </div>
-        <div class="form-group">
-          <label for="customerEmail">Email Address *</label>
-          <input id="customerEmail" type="email" required placeholder="you@email.com">
-        </div>
-
-        <div class="checkout-summary">
-          <div class="summary-row"><span>Total Amount:</span><span id="checkoutTotal">₹0</span></div>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-large">Complete Payment</button>
+      <h2>Complete Your Order</h2>
+      <form id="checkoutForm" onsubmit="handleCheckout(event)">
+        <label>Name* <input id="customerName" required /></label>
+        <label>Phone* <input id="customerPhone" required /></label>
+        <label>Email* <input id="customerEmail" type="email" required /></label>
+        <div>Total: <span id="checkoutTotal">₹0</span></div>
+        <button class="btn btn-primary">Complete Payment</button>
       </form>
     </div>
   </div>
 
-  <!-- success modal -->
-  <div id="successModal" class="modal-backdrop" role="dialog" aria-modal="true">
+  <!-- Success Modal -->
+  <div id="successModal" class="modal-backdrop">
     <div class="modal-content success-modal">
-      <div class="success-checkmark">✓</div>
-      <h2 class="success-title">Payment Successful! 🎉</h2>
-      <p class="success-message">Thank you — you'll receive the download links by email shortly.</p>
+      <h2>Payment Successful!</h2>
       <p>Order ID: <strong id="orderId"></strong></p>
-      <p>Confirmation sent to: <strong id="confirmEmail"></strong></p>
-      <button class="btn btn-primary" onclick="closeSuccess()">Continue Shopping</button>
+      <p>Confirmation sent to <strong id="confirmEmail"></strong></p>
+      <button onclick="closeSuccess()" class="btn btn-primary">Continue</button>
     </div>
   </div>
 
-  <!-- chat widget -->
+  <!-- Chat Widget -->
   <div class="chat-widget">
-    <button id="chatBubble" class="chat-bubble" onclick="toggleChat()" aria-label="Chat">💬</button>
-    <div id="chatBox" class="chat-box" aria-hidden="true">
+    <button id="chatBubble" class="chat-bubble" onclick="toggleChat()">💬</button>
+
+    <div id="chatBox" class="chat-box">
       <div class="chat-header">
-        <div class="chat-seller">
-          <img src="https://via.placeholder.com/40x40/E6B8FF/ffffff?text=ER" alt="Emma Rose">
-          <div>
-            <div class="chat-seller-name">Emma Rose</div>
-            <div class="chat-seller-status">Online</div>
-          </div>
-        </div>
-        <button class="chat-close-btn" onclick="toggleChat()" aria-label="Close chat">×</button>
+        <div class="chat-seller-name">Emma Rose</div>
+        <button onclick="toggleChat()">×</button>
       </div>
 
-      <div id="chatMessages" class="chat-messages" aria-live="polite">
+      <div id="chatMessages" class="chat-messages">
         <div class="chat-message received">
-          <div class="message-content">Hi! 👋 I'm Emma. How can I help you create something beautiful today?</div>
+          <div class="message-content">Hi! 👋 How can I help you today?</div>
         </div>
       </div>
 
       <div class="chat-input-container">
-        <input id="chatInput" type="text" placeholder="Type your message..." aria-label="Chat input">
-        <button class="chat-send-btn" onclick="sendMessage()" aria-label="Send message">➤</button>
-      </div>
-
-      <div class="chat-quick-actions">
-        <a class="whatsapp-link" href="https://wa.me/1234567890" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+        <input id="chatInput" placeholder="Type...">
+        <button onclick="sendMessage()" class="chat-send-btn">➤</button>
       </div>
     </div>
   </div>
 
-  <!-- auth / account controls injected by script.js -->
-
-  <!-- scripts (order important) -->
-  <!-- product.js - API layer / product helpers (you asked product singular) -->
+  <!-- JS Files -->
   <script src="product.js" defer></script>
-
-  <!-- products-table.js - currently empty per your note; loaded anyway -->
   <script src="products-table.js" defer></script>
-
-  <!-- main front-end behavior -->
   <script src="script.js" defer></script>
+
 </body>
 </html>

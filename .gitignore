@@ -1,4 +1,35 @@
+# Node modules
 node_modules/
+
+# Environment variables
 .env
+
+# Build / cache / temp folders
 tmp_uploads/
 .DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs
+*.log
+*.log.*
+
+# Supabase temp files (if any)
+.supabase
+
+# OS files
+Thumbs.db
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Optional: ignore product zip previews if generated (safe)
+*.zip
+
+# Prevent committing uploaded assets accidentally
+BACKEND/uploads/
+BACKEND/tmp_uploads/
+frontend/uploads/

@@ -1,42 +1,58 @@
 // BACKEND/server.js
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const bodyParser = require("body-parser");
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-
-// route files (ensure these exist in BACKEND/)
-const uploadRoutes = require('./upload'); // handles POST /api/upload
-const downloadRoutes = require('./download'); // handles GET /api/download/:productId
-const productsRoutes = require('./product'); // handles /api/products
+const uploadRouter = require("./upload");
+const productsRouter = require("./product");
+const downloadRouter = require("./download");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// CORS - set FRONTEND_ORIGIN to your frontend URL in production
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || '*';
-app.use(cors({
-  origin: FRONTEND_ORIGIN,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'x-admin-secret', 'Authorization']
-}));
+/* ------------------------------
+   CORS — SAFE FOR PRODUCTION
+------------------------------ */
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "*";
 
-// Increase payload limits for file uploads encoded in base64
-app.use(bodyParser.json({ limit: '100mb' }));
-app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+app.use(
+  cors({
+    origin: FRONTEND_ORIGIN,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "x-admin-secret"],
+  })
+);
 
-// mount API routes under /api
-app.use('/api', uploadRoutes);
-app.use('/api', downloadRoutes);
-app.use('/api', productsRoutes);
+app.use(bodyParser.json({ limit: "250mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "250mb" }));
 
-// health check root
-app.get('/', (req, res) => {
-  res.json({ status: 'ehomershine backend up', environment: process.env.NODE_ENV || 'development' });
+/* ------------------------------
+   HEALTH CHECK
+------------------------------ */
+app.get("/", (req, res) => {
+  res.json({ status: "OK", message: "eHomerShine backend running" });
 });
 
-// start server
+/* ------------------------------
+   API ROUTES
+------------------------------ */
+app.use("/api/upload", uploadRouter);
+app.use("/api/products", productsRouter);
+app.use("/api/download", downloadRouter);
+
+/* ------------------------------
+   ERROR HANDLER
+------------------------------ */
+app.use((err, req, res, next) => {
+  console.error("SERVER ERROR:", err);
+  res.status(500).json({ error: "Internal server error", details: err.message });
+});
+
+/* ------------------------------
+   START SERVER
+------------------------------ */
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`✔ Backend running on port ${PORT}`);
 });

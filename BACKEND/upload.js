@@ -11,7 +11,7 @@ const supabase = require("./supabase");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET;
-const BUCKET = process.env.SUPABASE_BUCKET || "files"; // use env or default "files"
+const BUCKET = process.env.SUPABASE_BUCKET || "files";
 const TMP_DIR = path.resolve(__dirname, "../tmp_uploads");
 
 // ensure tmp dir exists (used by multer fallback)
@@ -20,9 +20,9 @@ if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
 // multer: fallback for browser form uploads (not required if admin UI sends base64)
 const upload = multer({ dest: TMP_DIR, limits: { fileSize: 200 * 1024 * 1024 } }); // 200MB cap
 
-// ---------------------------
-// Helpers
-// ---------------------------
+/* ---------------------------
+   Helpers
+--------------------------- */
 function getMimeType(filename) {
   const ext = (filename || "").split(".").pop().toLowerCase();
   const map = {
@@ -40,26 +40,30 @@ function buildPublicUrl(supabaseUrl, bucket, filePath) {
   return `${supabaseUrl.replace(/\/$/, "")}/storage/v1/object/public/${encodeURIComponent(bucket)}/${encodeURIComponent(filePath)}`;
 }
 
-// ---------------------------
-// Admin auth middleware
-// ---------------------------
 function requireAdmin(req, res, next) {
   const secret = req.headers["x-admin-secret"];
+  if (!ADMIN_SECRET) {
+    console.warn("ADMIN_SECRET not set in environment — rejecting admin calls");
+    return res.status(500).json({ error: "Server misconfiguration: ADMIN_SECRET not set" });
+  }
   if (!secret || secret !== ADMIN_SECRET) {
     return res.status(401).json({ error: "Unauthorized: invalid admin secret" });
   }
   next();
 }
 
-// MAIN ROUTE
-router.post("/upload", requireAdmin, upload.any(), async (req, res) => {
+/* ---------------------------
+   Upload route
+   POST / (mounted under /api/upload)
+--------------------------- */
+router.post("/", requireAdmin, upload.any(), async (req, res) => {
   try {
     const body = req.body || {};
-    const title = body.title;
+    const title = (body.title || "").toString().trim();
     const price = Number(body.price || 0);
     const old_price = body.old_price ? Number(body.old_price) : null;
-    const category = body.category;
-    const description = body.description || "";
+    const category = (body.category || "").toString().trim();
+    const description = (body.description || "").toString().trim();
 
     const incomingFiles = [];
 
@@ -86,27 +90,35 @@ router.post("/upload", requireAdmin, upload.any(), async (req, res) => {
     // B) multer files (multipart/form-data)
     if (Array.isArray(req.files) && req.files.length > 0) {
       for (const mf of req.files) {
-        const buffer = fs.readFileSync(mf.path);
-        incomingFiles.push({
-          filename: mf.originalname || mf.filename || mf.path.split(path.sep).pop(),
-          buffer,
-          mimeType: mf.mimetype || getMimeType(mf.originalname)
-        });
-        try { fs.unlinkSync(mf.path); } catch (e) {}
+        try {
+          const buffer = fs.readFileSync(mf.path);
+          incomingFiles.push({
+            filename: mf.originalname || mf.filename || mf.path.split(path.sep).pop(),
+            buffer,
+            mimeType: mf.mimetype || getMimeType(mf.originalname)
+          });
+        } catch (e) {
+          console.warn("Could not read multer file:", mf.path, e);
+        } finally {
+          try { fs.unlinkSync(mf.path); } catch (e) {}
+        }
       }
     }
 
+    // validate
     if (!title || !price || !category || incomingFiles.length === 0) {
-      return res.status(400).json({ error: "Missing required fields. Required: title, price, category, files" });
+      return res.status(400).json({ error: "Missing required fields. Required: title, price (>0), category, files" });
     }
 
     const uploadedFiles = [];
     const SUPABASE_URL = process.env.SUPABASE_URL || null;
 
     for (const f of incomingFiles) {
-      const uniqName = `${Date.now()}-${Math.random().toString(36).slice(2,8)}-${f.filename}`;
+      const safeName = (f.filename || "file").replace(/[^a-zA-Z0-9.\-_]/g, "_");
+      const uniqName = `${Date.now()}-${Math.random().toString(36).slice(2,8)}-${safeName}`;
       const filePath = `products/${uniqName}`;
 
+      // Upload buffer to Supabase storage
       const { error: uploadError } = await supabase.storage
         .from(BUCKET)
         .upload(filePath, f.buffer, {
@@ -119,13 +131,18 @@ router.post("/upload", requireAdmin, upload.any(), async (req, res) => {
         return res.status(500).json({ error: "Failed to upload file to storage", detail: uploadError.message || uploadError });
       }
 
-      const publicUrlObj = supabase.storage.from(BUCKET).getPublicUrl(filePath);
+      // Attempt to get public URL
       let publicUrl = null;
-      if (publicUrlObj && publicUrlObj.data && (publicUrlObj.data.publicUrl || publicUrlObj.data.publicURL)) {
-        publicUrl = publicUrlObj.data.publicUrl || publicUrlObj.data.publicURL;
-      } else if (publicUrlObj && (publicUrlObj.publicURL || publicUrlObj.publicUrl)) {
-        publicUrl = publicUrlObj.publicURL || publicUrlObj.publicUrl;
-      } else {
+      try {
+        const publicObj = supabase.storage.from(BUCKET).getPublicUrl(filePath);
+        if (publicObj && publicObj.data && (publicObj.data.publicUrl || publicObj.data.publicURL)) {
+          publicUrl = publicObj.data.publicUrl || publicObj.data.publicURL;
+        } else if (publicObj && (publicObj.publicUrl || publicObj.publicURL)) {
+          publicUrl = publicObj.publicUrl || publicObj.publicURL;
+        } else {
+          publicUrl = buildPublicUrl(SUPABASE_URL, BUCKET, filePath);
+        }
+      } catch (e) {
         publicUrl = buildPublicUrl(SUPABASE_URL, BUCKET, filePath);
       }
 
@@ -137,6 +154,7 @@ router.post("/upload", requireAdmin, upload.any(), async (req, res) => {
       });
     }
 
+    // Insert product row in DB
     const { data, error } = await supabase
       .from("products")
       .insert({
@@ -157,7 +175,7 @@ router.post("/upload", requireAdmin, upload.any(), async (req, res) => {
 
     return res.json({
       success: true,
-      product: data[0]
+      product: data && data[0] ? data[0] : null
     });
 
   } catch (err) {

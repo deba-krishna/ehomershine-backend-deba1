@@ -2,11 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>eHomerShine Admin — Dashboard</title>
-  <link rel="stylesheet" href="admin.css">
+
+  <!-- Main Admin CSS -->
+  <link rel="stylesheet" href="admin.css" />
+
+  <!-- Extra Mobile Fixes -->
+  <style>
+    /* MOBILE LAYOUT FIXES */
+    @media (max-width:960px){
+      .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        flex-direction: row;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .sidebar::-webkit-scrollbar { display:none; }
+
+      .nav {
+        flex-direction: row;
+        gap: 8px;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 6px;
+      }
+      .nav-item {
+        flex: 0 0 auto;
+        padding: 10px 14px;
+      }
+
+      .content-grid {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .topbar input {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .upload-card, 
+      .sidebar-right {
+        width: 100%;
+      }
+
+      table.products-table {
+        font-size: 12px;
+      }
+
+      table.products-table thead {
+        white-space: nowrap;
+      }
+
+      table.products-table {
+        overflow-x: auto;
+        display: block;
+      }
+
+      .recent-list,
+      .file-preview {
+        max-height: 200px;
+      }
+    }
+
+    /* Ultra-small devices */
+    @media (max-width:480px){
+      .nav-item { font-size: 12px; padding: 8px 12px; }
+      .btn { padding: 8px 12px; font-size: 13px; }
+      h3 { font-size: 16px; }
+      .card { padding: 14px; }
+    }
+  </style>
 </head>
+
 <body>
+
   <div id="app" class="app" aria-live="polite">
 
     <!-- SIDEBAR -->
@@ -19,7 +93,7 @@
         </div>
       </div>
 
-      <nav class="nav" role="navigation" aria-label="Main">
+      <nav class="nav" role="navigation">
         <button class="nav-item active" data-panel="upload">Upload</button>
         <button class="nav-item" data-panel="products">Products</button>
         <button class="nav-item" data-panel="orders">Orders</button>
@@ -40,6 +114,8 @@
 
     <!-- MAIN -->
     <main class="main">
+
+      <!-- TOPBAR -->
       <header class="topbar">
         <input id="quickSearch" placeholder="Search products..." aria-label="Search products" />
         <div class="top-actions">
@@ -47,46 +123,48 @@
         </div>
       </header>
 
-      <!-- PANELS -->
+      <!-- UPLOAD PANEL -->
       <section class="panel upload-panel" id="panel-upload" data-panel="upload">
 
         <!-- LOGIN OVERLAY -->
-        <div id="loginOverlay" class="login-overlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <div id="loginOverlay" class="login-overlay" role="dialog" aria-modal="true">
           <div class="login-card">
-            <h2 id="loginTitle">Admin Login</h2>
+            <h2>Admin Login</h2>
             <p>Sign in to manage products</p>
-            <input id="adminPassword" type="password" placeholder="Admin password" aria-label="Admin password">
+            <input id="adminPassword" type="password" placeholder="Admin password">
             <div class="login-actions">
               <button id="loginBtn" class="btn primary">Sign in</button>
             </div>
-            <div id="loginError" class="muted error" role="alert" aria-live="assertive"></div>
+            <div id="loginError" class="muted error" role="alert"></div>
           </div>
         </div>
 
+        <!-- GRID -->
         <div class="content-grid">
+
           <!-- Upload Card -->
-          <div class="card upload-card" role="region" aria-label="Upload product form">
+          <div class="card upload-card">
             <h3>Add New Product</h3>
 
             <div class="form-row">
               <label>Title *</label>
-              <input id="title" type="text" placeholder="e.g. Starlit Proposal">
+              <input id="title" type="text" placeholder="e.g. Starlit Proposal" />
             </div>
 
             <div class="form-row split">
               <div>
                 <label>Price (₹) *</label>
-                <input id="price" type="number" min="0" placeholder="999">
+                <input id="price" type="number" min="0" placeholder="999" />
               </div>
               <div>
                 <label>Old Price</label>
-                <input id="oldPrice" type="number" min="0" placeholder="1299">
+                <input id="oldPrice" type="number" min="0" placeholder="1299" />
               </div>
             </div>
 
             <div class="form-row">
               <label>Category *</label>
-              <select id="category" aria-label="Category">
+              <select id="category">
                 <option>Birthday Wishes</option>
                 <option>Birthday Wishes for Crush</option>
                 <option>Proposal</option>
@@ -107,21 +185,21 @@
 
             <div class="form-row">
               <label>Description *</label>
-              <textarea id="description" placeholder="Short description (for listing)"></textarea>
+              <textarea id="description" placeholder="Short description"></textarea>
             </div>
 
             <div class="form-row">
               <label>Files (drag & drop or click) *</label>
-              <div id="dropzone" class="dropzone" tabindex="0" aria-label="File upload dropzone">
+              <div id="dropzone" class="dropzone">
                 <div class="dz-inner">
                   <div class="dz-illustration">📁</div>
                   <div class="dz-text"><strong>Drop files here</strong> or <span class="linkish">browse</span></div>
                   <div class="dz-hint">Supports: .zip .html .jpg .png .gif .mp4</div>
                 </div>
-                <input id="fileInput" type="file" multiple aria-label="Choose files" />
+                <input id="fileInput" type="file" multiple />
               </div>
 
-              <div id="filePreview" class="file-preview" aria-live="polite"></div>
+              <div id="filePreview" class="file-preview"></div>
             </div>
 
             <div class="form-row actions-row">
@@ -136,7 +214,7 @@
             <div id="uploadStatus" class="muted status"></div>
           </div>
 
-          <!-- Right column -->
+          <!-- Right Column -->
           <aside class="sidebar-right">
             <div class="card mini">
               <h4>Quick Info</h4>
@@ -153,34 +231,55 @@
 
             <div class="card mini">
               <h4>Help</h4>
-              <div class="muted">Use the admin password to unlock UI. Server still requires <code>x-admin-secret</code>.</div>
+              <div class="muted">Use admin password to unlock. Server still requires <code>x-admin-secret</code>.</div>
             </div>
           </aside>
+
         </div>
       </section>
 
-      <!-- Products -->
+      <!-- PRODUCTS PANEL -->
       <section class="panel" id="panel-products" data-panel="products" hidden>
-        <div class="card"><h3>Products</h3><div id="productsTable">Loading...</div></div>
+        <div class="card">
+          <h3>Products</h3>
+          <div id="productsTable">Loading...</div>
+        </div>
       </section>
 
-      <!-- Orders -->
+      <!-- ORDERS PANEL -->
       <section class="panel" id="panel-orders" data-panel="orders" hidden>
-        <div class="card"><h3>Orders</h3><div id="ordersTable">No orders</div></div>
+        <div class="card">
+          <h3>Orders</h3>
+          <div id="ordersTable">No orders</div>
+        </div>
       </section>
 
-      <!-- Settings -->
+      <!-- SETTINGS PANEL -->
       <section class="panel" id="panel-settings" data-panel="settings" hidden>
         <div class="card">
           <h3>Settings</h3>
-          <div class="form-row"><label>Backend base URL</label><input id="backendBase" placeholder="https://your-backend.example" /></div>
-          <div class="form-row"><label>Admin header (x-admin-secret)</label><input id="adminHeaderVal" placeholder="mySuperAdmin4090" /></div>
-          <div class="form-row actions-row"><div></div><div><button id="saveSettings" class="btn primary">Save</button></div></div>
+
+          <div class="form-row">
+            <label>Backend base URL</label>
+            <input id="backendBase" placeholder="https://your-backend.example" />
+          </div>
+
+          <div class="form-row">
+            <label>x-admin-secret</label>
+            <input id="adminHeaderVal" placeholder="mySuperAdmin4090" />
+          </div>
+
+          <div class="form-row actions-row">
+            <div></div>
+            <div><button id="saveSettings" class="btn primary">Save</button></div>
+          </div>
         </div>
       </section>
+
     </main>
   </div>
 
+  <!-- ADMIN LOGIC -->
   <script src="admin.js"></script>
 </body>
 </html>

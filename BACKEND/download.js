@@ -1,63 +1,88 @@
 // BACKEND/download.js
+// Generates signed download URLs for product files
+
 const express = require("express");
 const router = express.Router();
-const supabase = require("./supabase");
 const path = require("path");
+const supabase = require("./supabase");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
-// Signed URL active time: 2 hours (7200 seconds)
-const EXPIRES_IN = 60 * 60 * 2;
+const ADMIN_SECRET = process.env.ADMIN_SECRET;
+const BUCKET = process.env.SUPABASE_BUCKET || "files";
 
+/* ============================================================
+   GET /api/download/:productId
+   Returns signed download URLs for all files of a product
+============================================================ */
 router.get("/download/:productId", async (req, res) => {
     try {
         const productId = req.params.productId;
-        if (!productId) return res.status(400).json({ error: "Missing product ID" });
         
-        const { data: product, error: dbError } = await supabase
+        // 1) Fetch product record
+        const { data: product, error } = await supabase
             .from("products")
             .select("id, title, files")
             .eq("id", productId)
             .single();
         
-        if (dbError || !product) return res.status(404).json({ error: "Product not found" });
-        if (!product.files || product.files.length === 0) return res.status(404).json({ error: "No files attached to this product" });
+        if (error || !product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
         
-        const BUCKET = process.env.SUPABASE_BUCKET || "files";
-        const signedUrls = [];
+        if (!product.files || !Array.isArray(product.files)) {
+            return res.status(400).json({ error: "No files found for this product" });
+        }
+        
+        // 2) Generate signed URLs for each file path
+        const signedFiles = [];
         
         for (const file of product.files) {
-            const filePath = file.path || file.filePath || null;
-            if (!filePath) continue;
+            if (!file.path) continue;
             
-            const { data: signed, error: signedError } = await supabase.storage
-                .from(BUCKET)
-                .createSignedUrl(filePath, EXPIRES_IN);
+            const { data: signed, error: signedErr } =
+            await supabase.storage.from(BUCKET).createSignedUrl(file.path, 60 * 60 * 2); // 2 hours
             
-            if (signedError) {
-                console.error("Signed URL creation error:", signedError);
+            if (signedErr) {
+                console.error("Signed URL error:", signedErr);
                 continue;
             }
             
-            signedUrls.push({
-                filename: file.filename,
+            signedFiles.push({
+                name: file.filename || "file",
                 url: signed.signedUrl,
-                expiresIn: EXPIRES_IN
             });
         }
         
-        if (signedUrls.length === 0) return res.status(500).json({ error: "Unable to generate download links" });
-        
         return res.json({
-            success: true,
-            productId: product.id,
+            productId,
             title: product.title,
-            downloads: signedUrls
+            files: signedFiles,
         });
         
     } catch (err) {
         console.error("Download error:", err);
         return res.status(500).json({ error: "Internal server error" });
     }
+});
+
+/* ============================================================
+   OPTIONAL:
+   Admin-only endpoint to list all files stored in bucket
+   GET /api/admin/list-files
+============================================================ */
+router.get("/admin/list-files", (req, res) => {
+    const header = req.headers["x-admin-secret"];
+    if (!header || header !== ADMIN_SECRET) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    supabase.storage
+        .from(BUCKET)
+        .list("", { recursive: true })
+        .then(({ data, error }) => {
+            if (error) return res.status(500).json({ error: "Listing failed" });
+            res.json({ files: data });
+        });
 });
 
 module.exports = router;
