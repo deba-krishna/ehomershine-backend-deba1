@@ -1,430 +1,313 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Premium emotional code marketplace - Beautiful romantic web templates and components">
-    <meta property="og:title" content="Emotional Code Marketplace">
-    <meta property="og:description" content="Discover stunning romantic web templates for every special moment">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630/FFB6C1/ffffff?text=Emotional+Code+Marketplace">
-    <meta property="og:type" content="website">
-    <title>Emotional Code Marketplace | Premium Romantic Templates</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Replace placeholder favicon with actual brand icon -->
-    <link rel="icon" href="https://via.placeholder.com/32x32/FFB6C1/ffffff?text=♥">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Premium emotional code marketplace - Romantic web templates & components" />
+  <title>Emotional Code Marketplace | Premium Romantic Templates</title>
+
+  <!-- stylesheet (you provided) -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- small config available to JS (backend base URL) -->
+  <script>
+    // FRONTEND CONFIG - update here if backend URL changes
+    window.EC_CONFIG = {
+      BACKEND_BASE: "https://ehomershine-backend-deba1-13.onrender.com",
+      API_PRODUCT_ENDPOINT: "/api/product",     // backend path for single product API if used
+      API_PRODUCTS_ENDPOINT: "/api/products"    // backend path for products list
+    };
+  </script>
+
+  <!-- favicon -->
+  <link rel="icon" href="https://via.placeholder.com/32x32/FFB6C1/ffffff?text=♥" />
 </head>
 <body class="light-theme">
-    
-    <!-- Sparkles Background Animation -->
-    <div class="sparkles-container" aria-hidden="true">
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
+
+  <!-- sparkles (visual) -->
+  <div class="sparkles-container" aria-hidden="true">
+    <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+    <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+    <div class="sparkle"></div><div class="sparkle"></div>
+  </div>
+
+  <!-- theme toggle -->
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+    <span class="theme-icon sun-icon">☀️</span>
+    <span class="theme-icon moon-icon">🌙</span>
+  </button>
+
+  <!-- HERO -->
+  <header class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-headline">
+          Code Your Emotions<br>
+          <span class="gradient-text">Into Beautiful Reality</span>
+        </h1>
+        <p class="hero-subtext">
+          Premium romantic web templates crafted with love — proposals, anniversaries and heartfelt web experiences.
+        </p>
+        <div class="hero-cta-group">
+          <button class="btn btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Templates</button>
+          <button class="btn btn-secondary" onclick="openChat()">Get Custom Design</button>
+        </div>
+      </div>
+
+      <div class="hero-illustration">
+        <img src="https://via.placeholder.com/600x500/FFE5EC/FFB6C1?text=♥+Romantic+Designs" alt="Hero illustration" loading="eager">
+      </div>
     </div>
+  </header>
 
-    <!-- Theme Toggle Button -->
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-        <span class="theme-icon sun-icon">☀️</span>
-        <span class="theme-icon moon-icon">🌙</span>
-    </button>
+  <!-- MAIN GRID -->
+  <div class="main-container">
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-headline">
-                    Code Your Emotions<br>
-                    <span class="gradient-text">Into Beautiful Reality</span>
-                </h1>
-                <p class="hero-subtext">
-                    Premium romantic web templates crafted with love for proposals, anniversaries, and every heartfelt moment that matters
-                </p>
-                <div class="hero-cta-group">
-                    <button class="btn btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-                        Explore Templates
-                    </button>
-                    <button class="btn btn-secondary" onclick="openChat()">
-                        Get Custom Design
-                    </button>
-                </div>
-            </div>
-            <div class="hero-illustration">
-                <!-- Replace with actual illustration or animated SVG -->
-                <img src="https://via.placeholder.com/600x500/FFE5EC/FFB6C1?text=♥+Romantic+Designs" alt="Hero illustration" loading="eager">
-            </div>
+    <!-- SIDEBAR -->
+    <aside class="seller-sidebar" id="sellerSidebar">
+      <div class="seller-card" role="region" aria-label="Seller information">
+        <div class="seller-avatar">
+          <img src="https://via.placeholder.com/120x120/E6B8FF/ffffff?text=Seller" alt="Seller avatar">
+          <div class="online-badge" aria-hidden="true"></div>
         </div>
-    </section>
+        <h2 class="seller-name">Emma Rose</h2>
+        <p class="seller-bio">Crafting digital love stories through code ✨ Specialized in romantic web experiences</p>
 
-    <!-- Main Content Grid -->
-    <div class="main-container">
-        
-        <!-- Seller Sidebar -->
-        <aside class="seller-sidebar" id="sellerSidebar">
-            <div class="seller-card">
-                <div class="seller-avatar">
-                    <!-- Replace with actual seller photo -->
-                    <img src="https://via.placeholder.com/120x120/E6B8FF/ffffff?text=Seller" alt="Seller avatar">
-                    <div class="online-badge" aria-label="Online now"></div>
-                </div>
-                <h2 class="seller-name">Emma Rose</h2>
-                <p class="seller-bio">Crafting digital love stories through code ✨ Specialized in romantic web experiences</p>
-                
-                <div class="seller-stats">
-                    <div class="stat-item">
-                        <div class="stat-icon">⭐</div>
-                        <div class="stat-info">
-                            <div class="stat-value">4.9</div>
-                            <div class="stat-label">Rating</div>
-                        </div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">👥</div>
-                        <div class="stat-info">
-                            <div class="stat-value">2.4K</div>
-                            <div class="stat-label">Followers</div>
-                        </div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">📦</div>
-                        <div class="stat-info">
-                            <div class="stat-value">856</div>
-                            <div class="stat-label">Orders</div>
-                        </div>
-                    </div>
-                </div>
+        <div class="seller-stats" aria-hidden="false">
+          <div class="stat-item"><div class="stat-icon">⭐</div><div class="stat-info"><div class="stat-value">4.9</div><div class="stat-label">Rating</div></div></div>
+          <div class="stat-item"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value">2.4K</div><div class="stat-label">Followers</div></div></div>
+          <div class="stat-item"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-value">856</div><div class="stat-label">Orders</div></div></div>
+        </div>
 
-                <div class="seller-socials">
-                    <a href="https://instagram.com" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
-                        <span class="social-icon">📷</span>
-                        Instagram
-                    </a>
-                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener" class="social-link" aria-label="WhatsApp">
-                        <span class="social-icon">💬</span>
-                        WhatsApp
-                    </a>
-                </div>
-            </div>
-        </aside>
+        <div class="seller-socials">
+          <a class="social-link" href="https://instagram.com" target="_blank" rel="noopener">📷 Instagram</a>
+          <a class="social-link" href="https://wa.me/1234567890" target="_blank" rel="noopener">💬 WhatsApp</a>
+        </div>
+      </div>
+    </aside>
 
-        <!-- Products Section -->
-        <main class="products-section" id="products">
-            
-            <!-- Search and Filter Bar -->
-            <div class="controls-bar">
-                <div class="search-box">
-                    <input type="search" id="searchInput" placeholder="Search templates..." aria-label="Search templates">
-                    <span class="search-icon">🔍</span>
-                </div>
-                <div class="sort-select">
-                    <select id="sortSelect" aria-label="Sort products">
-                        <option value="featured">Featured</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                        <option value="newest">Newest First</option>
-                    </select>
-                </div>
-            </div>
+    <!-- PRODUCTS -->
+    <main class="products-section" id="products" role="main">
 
-            <!-- Category Filter Chips -->
-            <div class="filter-chips" role="tablist" aria-label="Product categories">
-                <button class="chip active" data-category="all" role="tab" aria-selected="true">All</button>
-                <button class="chip" data-category="proposal" role="tab" aria-selected="false">Proposal</button>
-                <button class="chip" data-category="anniversary" role="tab" aria-selected="false">Anniversary</button>
-                <button class="chip" data-category="birthday" role="tab" aria-selected="false">Birthday</button>
-                <button class="chip" data-category="apology" role="tab" aria-selected="false">Apology</button>
-                <button class="chip" data-category="landing" role="tab" aria-selected="false">Landing Page</button>
-                <button class="chip" data-category="components" role="tab" aria-selected="false">Components</button>
-                <button class="chip" data-category="fullstack" role="tab" aria-selected="false">Full Stack</button>
-            </div>
+      <!-- controls -->
+      <div class="controls-bar" role="search">
+        <div class="search-box" aria-label="Search templates">
+          <input id="searchInput" type="search" placeholder="Search templates..." aria-label="Search templates">
+          <span class="search-icon">🔍</span>
+        </div>
 
-            <!-- Product Grid -->
-            <div class="product-grid" id="productGrid">
-                <!-- Products will be dynamically inserted here via JavaScript -->
-            </div>
+        <div class="sort-select" aria-label="Sort options">
+          <select id="sortSelect">
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+          </select>
+        </div>
+      </div>
 
-        </main>
+      <!-- chips -->
+      <div class="filter-chips" role="tablist" aria-label="Product categories">
+        <button class="chip active" data-category="all" role="tab" aria-selected="true">All</button>
+        <button class="chip" data-category="proposal" role="tab" aria-selected="false">Proposal</button>
+        <button class="chip" data-category="anniversary" role="tab" aria-selected="false">Anniversary</button>
+        <button class="chip" data-category="birthday" role="tab" aria-selected="false">Birthday</button>
+        <button class="chip" data-category="apology" role="tab" aria-selected="false">Apology</button>
+        <button class="chip" data-category="landing" role="tab" aria-selected="false">Landing Page</button>
+        <button class="chip" data-category="components" role="tab" aria-selected="false">Components</button>
+        <button class="chip" data-category="fullstack" role="tab" aria-selected="false">Full Stack</button>
+      </div>
+
+      <!-- grid -->
+      <div id="productGrid" class="product-grid" aria-live="polite">
+        <!-- products inserted by script.js -->
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section" aria-label="Testimonials">
+    <h2 class="section-title">Loved By Creators</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"The proposal template helped me create the most magical moment. She said yes!"</p>
+        <div class="testimonial-author">
+          <img src="https://via.placeholder.com/50x50/D8B4FE/ffffff?text=M" alt="Michael" loading="lazy">
+          <div><div class="author-name">Michael Chen</div><div class="author-title">Used Proposal Template</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Easy to customize and absolutely beautiful. Made our anniversary website in under an hour."</p>
+        <div class="testimonial-author">
+          <img src="https://via.placeholder.com/50x50/FFB6C1/ffffff?text=S" alt="Sarah" loading="lazy">
+          <div><div class="author-name">Sarah Williams</div><div class="author-title">Anniversary Special</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Professional quality code with romantic aesthetics. Highly recommended!"</p>
+        <div class="testimonial-author">
+          <img src="https://via.placeholder.com/50x50/FFDAB9/ffffff?text=R" alt="Raj" loading="lazy">
+          <div><div class="author-name">Raj Patel</div><div class="author-title">Developer & Designer</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"The apology template helped me express feelings I couldn't put into words."</p>
+        <div class="testimonial-author">
+          <img src="https://via.placeholder.com/50x50/E6B8FF/ffffff?text=L" alt="Lisa" loading="lazy">
+          <div><div class="author-name">Lisa Anderson</div><div class="author-title">Heartfelt Moments</div></div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials-section">
-        <h2 class="section-title">Loved By Creators</h2>
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                <p class="testimonial-text">"The proposal template helped me create the most magical moment. She said yes! The animations were absolutely stunning."</p>
-                <div class="testimonial-author">
-                    <img src="https://via.placeholder.com/50x50/D8B4FE/ffffff?text=M" alt="Michael" loading="lazy">
-                    <div>
-                        <div class="author-name">Michael Chen</div>
-                        <div class="author-title">Used Proposal Template</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                <p class="testimonial-text">"Easy to customize and absolutely beautiful. Made our anniversary website in under an hour. My wife was in tears!"</p>
-                <div class="testimonial-author">
-                    <img src="https://via.placeholder.com/50x50/FFB6C1/ffffff?text=S" alt="Sarah" loading="lazy">
-                    <div>
-                        <div class="author-name">Sarah Williams</div>
-                        <div class="author-title">Anniversary Special</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                <p class="testimonial-text">"Professional quality code with romantic aesthetics. Perfect for creating heartfelt digital experiences. Highly recommended!"</p>
-                <div class="testimonial-author">
-                    <img src="https://via.placeholder.com/50x50/FFDAB9/ffffff?text=R" alt="Raj" loading="lazy">
-                    <div>
-                        <div class="author-name">Raj Patel</div>
-                        <div class="author-title">Developer & Designer</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                <p class="testimonial-text">"The apology template helped me express feelings I couldn't put into words. Beautiful design and truly emotional experience."</p>
-                <div class="testimonial-author">
-                    <img src="https://via.placeholder.com/50x50/E6B8FF/ffffff?text=L" alt="Lisa" loading="lazy">
-                    <div>
-                        <div class="author-name">Lisa Anderson</div>
-                        <div class="author-title">Heartfelt Moments</div>
-                    </div>
-                </div>
-            </div>
+  <!-- product modal -->
+  <div id="productModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+      <div class="modal-body">
+        <div class="modal-gallery">
+          <div class="gallery-main">
+            <button class="gallery-nav prev" onclick="prevImage()" aria-label="Previous">‹</button>
+            <img id="modalMainImage" src="" alt="Preview">
+            <button class="gallery-nav next" onclick="nextImage()" aria-label="Next">›</button>
+          </div>
+          <div id="modalThumbnails" class="gallery-thumbnails" aria-hidden="false"></div>
         </div>
-    </section>
 
-    <!-- Product Detail Modal -->
-    <div class="modal-backdrop" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
-            
-            <div class="modal-body">
-                <div class="modal-gallery">
-                    <div class="gallery-main">
-                        <button class="gallery-nav prev" onclick="prevImage()" aria-label="Previous image">‹</button>
-                        <img id="modalMainImage" src="" alt="Product preview" loading="lazy">
-                        <button class="gallery-nav next" onclick="nextImage()" aria-label="Next image">›</button>
-                    </div>
-                    <div class="gallery-thumbnails" id="modalThumbnails">
-                        <!-- Thumbnails inserted dynamically -->
-                    </div>
-                </div>
-
-                <div class="modal-info">
-                    <h2 id="modalTitle" class="modal-title"></h2>
-                    <div class="modal-price-group">
-                        <span class="modal-price" id="modalPrice"></span>
-                        <span class="modal-old-price" id="modalOldPrice"></span>
-                    </div>
-                    <div class="modal-tags" id="modalTags"></div>
-                    <div class="modal-description">
-                        <h3>What's Included:</h3>
-                        <ul id="modalIncludes">
-                            <!-- Dynamically populated -->
-                        </ul>
-                    </div>
-                    <div class="modal-actions">
-                        <button class="btn btn-primary btn-large" onclick="addToCartFromModal()">
-                            Add to Cart
-                        </button>
-                        <button class="btn btn-secondary" onclick="window.open(currentProduct.demoUrl, '_blank')">
-                            View Demo
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="modal-info">
+          <h2 id="modalTitle" class="modal-title"></h2>
+          <div class="modal-price-group">
+            <span id="modalPrice" class="modal-price"></span>
+            <span id="modalOldPrice" class="modal-old-price"></span>
+          </div>
+          <div id="modalTags" class="modal-tags"></div>
+          <div class="modal-description">
+            <h3>What's included:</h3>
+            <ul id="modalIncludes"></ul>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-primary btn-large" onclick="addToCartFromModal()">Add to Cart</button>
+            <button class="btn btn-secondary" onclick="window.open(currentProduct && currentProduct.demoUrl ? currentProduct.demoUrl : '#','_blank')">View Demo</button>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Cart Drawer -->
-    <div class="cart-drawer" id="cartDrawer">
-        <div class="cart-header">
-            <h2>Your Cart</h2>
-            <button class="cart-close" onclick="closeCart()" aria-label="Close cart">×</button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <!-- Cart items inserted dynamically -->
-        </div>
-        <div class="cart-empty" id="cartEmpty">
-            <span class="empty-icon">🛒</span>
-            <p>Your cart is empty</p>
-        </div>
-        <div class="cart-footer" id="cartFooter">
-            <div class="cart-summary">
-                <div class="summary-row">
-                    <span>Subtotal:</span>
-                    <span id="cartSubtotal">₹0</span>
-                </div>
-                <div class="summary-row">
-                    <span>Processing Fee (2%):</span>
-                    <span id="cartFee">₹0</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total:</span>
-                    <span id="cartTotal">₹0</span>
-                </div>
-            </div>
-            <button class="btn btn-primary btn-large" onclick="openCheckout()">
-                Proceed to Checkout
-            </button>
-        </div>
+  <!-- cart drawer -->
+  <div id="cartDrawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button class="cart-close" onclick="toggleCart()" aria-label="Close cart">×</button>
     </div>
-
-    <!-- Cart Button -->
-    <button class="cart-button" id="cartButton" onclick="toggleCart()" aria-label="Shopping cart">
-        🛒
-        <span class="cart-badge" id="cartBadge">0</span>
-    </button>
-
-    <!-- Checkout Modal -->
-    <div class="modal-backdrop" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
-        <div class="modal-content checkout-modal">
-            <button class="modal-close" onclick="closeCheckout()" aria-label="Close checkout">×</button>
-            
-            <h2 id="checkoutTitle" class="modal-title">Complete Your Order</h2>
-            
-            <form id="checkoutForm" class="checkout-form" onsubmit="handleCheckout(event)">
-                <div class="form-group">
-                    <label for="customerName">Full Name *</label>
-                    <input type="text" id="customerName" required placeholder="Your full name">
-                </div>
-                
-                <div class="form-group">
-                    <label for="customerInstagram">Instagram Handle</label>
-                    <input type="text" id="customerInstagram" placeholder="@yourhandle">
-                </div>
-                
-                <div class="form-group">
-                    <label for="customerPhone">Phone Number *</label>
-                    <input type="tel" id="customerPhone" required placeholder="+91 XXXXX XXXXX">
-                </div>
-                
-                <div class="form-group">
-                    <label for="customerEmail">Email Address *</label>
-                    <input type="email" id="customerEmail" required placeholder="your@email.com">
-                </div>
-                
-                <div class="form-group">
-                    <label for="orderNote">Order Note (Optional)</label>
-                    <textarea id="orderNote" rows="3" placeholder="Any special requirements or customization requests..."></textarea>
-                </div>
-
-                <div class="payment-methods">
-                    <h3>Select Payment Method</h3>
-                    <div class="payment-options">
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="upi" checked>
-                            <span class="payment-label">
-                                <span class="payment-icon">📱</span>
-                                UPI
-                            </span>
-                        </label>
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="netbanking">
-                            <span class="payment-label">
-                                <span class="payment-icon">🏦</span>
-                                Net Banking
-                            </span>
-                        </label>
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="card">
-                            <span class="payment-label">
-                                <span class="payment-icon">💳</span>
-                                Card
-                            </span>
-                        </label>
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="wallet">
-                            <span class="payment-label">
-                                <span class="payment-icon">👛</span>
-                                Wallet
-                            </span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="checkout-summary">
-                    <div class="summary-row">
-                        <span>Total Amount:</span>
-                        <span id="checkoutTotal" class="checkout-total-amount">₹0</span>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-large">
-                    Complete Payment
-                </button>
-            </form>
-        </div>
+    <div id="cartItems" class="cart-items" aria-live="polite"></div>
+    <div id="cartEmpty" class="cart-empty">
+      <span class="empty-icon">🛒</span>
+      <p>Your cart is empty</p>
     </div>
-
-    <!-- Success Modal -->
-    <div class="modal-backdrop" id="successModal" role="dialog" aria-modal="true">
-        <div class="modal-content success-modal">
-            <div class="success-animation">
-                <div class="success-checkmark">✓</div>
-                <div class="confetti-container" id="confettiContainer"></div>
-            </div>
-            <h2 class="success-title">Payment Successful! 🎉</h2>
-            <p class="success-message">
-                Thank you for your purchase! You'll receive your templates and download links via email shortly.
-            </p>
-            <div class="success-details">
-                <p>Order ID: <strong id="orderId"></strong></p>
-                <p>Confirmation sent to: <strong id="confirmEmail"></strong></p>
-            </div>
-            <button class="btn btn-primary" onclick="closeSuccess()">
-                Continue Shopping
-            </button>
-        </div>
+    <div id="cartFooter" class="cart-footer">
+      <div class="cart-summary">
+        <div class="summary-row"><span>Subtotal:</span><span id="cartSubtotal">₹0</span></div>
+        <div class="summary-row"><span>Processing Fee (2%):</span><span id="cartFee">₹0</span></div>
+        <div class="summary-row total"><span>Total:</span><span id="cartTotal">₹0</span></div>
+      </div>
+      <button class="btn btn-primary btn-large" onclick="openCheckout()">Proceed to Checkout</button>
     </div>
+  </div>
 
-    <!-- Chat Widget -->
-    <div class="chat-widget">
-        <button class="chat-bubble" id="chatBubble" onclick="toggleChat()" aria-label="Chat with us">
-            💬
-        </button>
-        <div class="chat-box" id="chatBox">
-            <div class="chat-header">
-                <div class="chat-seller">
-                    <img src="https://via.placeholder.com/40x40/E6B8FF/ffffff?text=ER" alt="Emma Rose">
-                    <div>
-                        <div class="chat-seller-name">Emma Rose</div>
-                        <div class="chat-seller-status">Online</div>
-                    </div>
-                </div>
-                <button class="chat-close-btn" onclick="toggleChat()" aria-label="Close chat">×</button>
-            </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="chat-message received">
-                    <div class="message-content">
-                        Hi! 👋 I'm Emma. How can I help you create something beautiful today?
-                    </div>
-                </div>
-            </div>
-            <div class="chat-input-container">
-                <input type="text" id="chatInput" placeholder="Type your message..." aria-label="Chat message">
-                <button class="chat-send-btn" onclick="sendMessage()" aria-label="Send message">
-                    ➤
-                </button>
-            </div>
-            <div class="chat-quick-actions">
-                <a href="https://wa.me/1234567890" target="_blank" rel="noopener" class="whatsapp-link">
-                    💬 Chat on WhatsApp
-                </a>
-            </div>
+  <!-- cart button -->
+  <button id="cartButton" class="cart-button" onclick="toggleCart()" aria-label="Shopping cart">
+    🛒 <span id="cartBadge" class="cart-badge">0</span>
+  </button>
+
+  <!-- checkout modal -->
+  <div id="checkoutModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-content checkout-modal">
+      <button class="modal-close" onclick="closeCheckout()" aria-label="Close checkout">×</button>
+      <h2 id="checkoutTitle" class="modal-title">Complete Your Order</h2>
+
+      <form id="checkoutForm" class="checkout-form" onsubmit="handleCheckout(event)">
+        <div class="form-group">
+          <label for="customerName">Full Name *</label>
+          <input id="customerName" type="text" required placeholder="Your full name">
         </div>
-    </div>
+        <div class="form-group">
+          <label for="customerPhone">Phone Number *</label>
+          <input id="customerPhone" type="tel" required placeholder="+91 XXXXX XXXXX">
+        </div>
+        <div class="form-group">
+          <label for="customerEmail">Email Address *</label>
+          <input id="customerEmail" type="email" required placeholder="you@email.com">
+        </div>
 
-    <!-- Scripts -->
-    <!-- Replace with actual backend API endpoints when integrating -->
-    <script src="script.js"></script>
+        <div class="checkout-summary">
+          <div class="summary-row"><span>Total Amount:</span><span id="checkoutTotal">₹0</span></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-large">Complete Payment</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- success modal -->
+  <div id="successModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-content success-modal">
+      <div class="success-checkmark">✓</div>
+      <h2 class="success-title">Payment Successful! 🎉</h2>
+      <p class="success-message">Thank you — you'll receive the download links by email shortly.</p>
+      <p>Order ID: <strong id="orderId"></strong></p>
+      <p>Confirmation sent to: <strong id="confirmEmail"></strong></p>
+      <button class="btn btn-primary" onclick="closeSuccess()">Continue Shopping</button>
+    </div>
+  </div>
+
+  <!-- chat widget -->
+  <div class="chat-widget">
+    <button id="chatBubble" class="chat-bubble" onclick="toggleChat()" aria-label="Chat">💬</button>
+    <div id="chatBox" class="chat-box" aria-hidden="true">
+      <div class="chat-header">
+        <div class="chat-seller">
+          <img src="https://via.placeholder.com/40x40/E6B8FF/ffffff?text=ER" alt="Emma Rose">
+          <div>
+            <div class="chat-seller-name">Emma Rose</div>
+            <div class="chat-seller-status">Online</div>
+          </div>
+        </div>
+        <button class="chat-close-btn" onclick="toggleChat()" aria-label="Close chat">×</button>
+      </div>
+
+      <div id="chatMessages" class="chat-messages" aria-live="polite">
+        <div class="chat-message received">
+          <div class="message-content">Hi! 👋 I'm Emma. How can I help you create something beautiful today?</div>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input id="chatInput" type="text" placeholder="Type your message..." aria-label="Chat input">
+        <button class="chat-send-btn" onclick="sendMessage()" aria-label="Send message">➤</button>
+      </div>
+
+      <div class="chat-quick-actions">
+        <a class="whatsapp-link" href="https://wa.me/1234567890" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- auth / account controls injected by script.js -->
+
+  <!-- scripts (order important) -->
+  <!-- product.js - API layer / product helpers (you asked product singular) -->
+  <script src="product.js" defer></script>
+
+  <!-- products-table.js - currently empty per your note; loaded anyway -->
+  <script src="products-table.js" defer></script>
+
+  <!-- main front-end behavior -->
+  <script src="script.js" defer></script>
 </body>
 </html>
