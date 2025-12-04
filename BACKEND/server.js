@@ -6,35 +6,37 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const uploadRoutes = require('./upload');
-const downloadRoutes = require('./download');
-const productsRoutes = require('./product'); // ← Correct file name
+// route files (ensure these exist in BACKEND/)
+const uploadRoutes = require('./upload'); // handles POST /api/upload
+const downloadRoutes = require('./download'); // handles GET /api/download/:productId
+const productsRoutes = require('./products'); // handles /api/products
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS
+// CORS - set FRONTEND_ORIGIN to your frontend URL in production
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || '*';
 app.use(cors({
   origin: FRONTEND_ORIGIN,
-  methods: ['GET', 'POST', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'x-admin-secret', 'Authorization']
 }));
 
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ extended: true }));
+// Increase payload limits for file uploads encoded in base64
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 
-// ROUTES
-app.use('/api/upload', uploadRoutes);
-app.use('/api/download', downloadRoutes);
-app.use('/api/products', productsRoutes);
+// mount API routes under /api
+app.use('/api', uploadRoutes);
+app.use('/api', downloadRoutes);
+app.use('/api', productsRoutes);
 
-// ROOT
+// health check root
 app.get('/', (req, res) => {
-  res.json({ status: 'ehomershine backend up' });
+  res.json({ status: 'ehomershine backend up', environment: process.env.NODE_ENV || 'development' });
 });
 
-// START
+// start server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

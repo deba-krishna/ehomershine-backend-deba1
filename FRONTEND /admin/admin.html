@@ -7,8 +7,7 @@
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <!-- APP -->
-  <div id="app" class="app">
+  <div id="app" class="app" aria-live="polite">
 
     <!-- SIDEBAR -->
     <aside class="sidebar" aria-label="Main navigation">
@@ -20,8 +19,8 @@
         </div>
       </div>
 
-      <nav class="nav">
-        <button class="nav-item active" data-panel="upload">Upload Product</button>
+      <nav class="nav" role="navigation" aria-label="Main">
+        <button class="nav-item active" data-panel="upload">Upload</button>
         <button class="nav-item" data-panel="products">Products</button>
         <button class="nav-item" data-panel="orders">Orders</button>
         <button class="nav-item" data-panel="settings">Settings</button>
@@ -35,23 +34,20 @@
             <div class="user-role">Owner</div>
           </div>
         </div>
-        <button id="logoutBtn" class="ghost">Logout</button>
+        <button id="logoutBtn" class="ghost">Lock</button>
       </div>
     </aside>
 
     <!-- MAIN -->
     <main class="main">
-      <!-- Top bar -->
       <header class="topbar">
-        <div class="top-search">
-          <input id="quickSearch" placeholder="Search products..." aria-label="Search products">
-        </div>
+        <input id="quickSearch" placeholder="Search products..." aria-label="Search products" />
         <div class="top-actions">
           <button id="themeToggle" class="icon-btn" title="Toggle theme">🌗</button>
         </div>
       </header>
 
-      <!-- Panels -->
+      <!-- PANELS -->
       <section class="panel upload-panel" id="panel-upload" data-panel="upload">
 
         <!-- LOGIN OVERLAY -->
@@ -68,8 +64,7 @@
         </div>
 
         <div class="content-grid">
-
-          <!-- LEFT: Upload Card -->
+          <!-- Upload Card -->
           <div class="card upload-card" role="region" aria-label="Upload product form">
             <h3>Add New Product</h3>
 
@@ -105,10 +100,7 @@
                 <option>Love Letters</option>
                 <option>Countdown Pages</option>
                 <option>Photo Galleries</option>
-                <option>Timeline Pages</option>
                 <option>Frontend Components Pack</option>
-                <option>Digital Gift Cards</option>
-                <option>Video Montage Templates</option>
                 <option>Full Website Kits</option>
               </select>
             </div>
@@ -144,7 +136,7 @@
             <div id="uploadStatus" class="muted status"></div>
           </div>
 
-          <!-- RIGHT: Preview / Recent -->
+          <!-- Right column -->
           <aside class="sidebar-right">
             <div class="card mini">
               <h4>Quick Info</h4>
@@ -156,31 +148,34 @@
 
             <div class="card mini">
               <h4>Recent uploads</h4>
-              <div id="recentList" class="recent-list">
-                <!-- Filled by JS -->
-              </div>
+              <div id="recentList" class="recent-list"></div>
             </div>
 
             <div class="card mini">
               <h4>Help</h4>
-              <div class="muted">Use <code>debaadmin4090</code> to open admin UI. Backend still needs x-admin-secret header.</div>
+              <div class="muted">Use the admin password to unlock UI. Server still requires <code>x-admin-secret</code>.</div>
             </div>
           </aside>
         </div>
       </section>
 
-      <!-- PRODUCTS / ORDERS / SETTINGS placeholders -->
+      <!-- Products -->
       <section class="panel" id="panel-products" data-panel="products" hidden>
         <div class="card"><h3>Products</h3><div id="productsTable">Loading...</div></div>
       </section>
 
+      <!-- Orders -->
       <section class="panel" id="panel-orders" data-panel="orders" hidden>
-        <div class="card"><h3>Orders</h3><div id="ordersTable">Loading...</div></div>
+        <div class="card"><h3>Orders</h3><div id="ordersTable">No orders</div></div>
       </section>
 
+      <!-- Settings -->
       <section class="panel" id="panel-settings" data-panel="settings" hidden>
-        <div class="card"><h3>Settings</h3>
-          <div class="form-row"><label>Frontend origin</label><input id="frontendOrigin" placeholder="http://localhost:3000"></div>
+        <div class="card">
+          <h3>Settings</h3>
+          <div class="form-row"><label>Backend base URL</label><input id="backendBase" placeholder="https://your-backend.example" /></div>
+          <div class="form-row"><label>Admin header (x-admin-secret)</label><input id="adminHeaderVal" placeholder="mySuperAdmin4090" /></div>
+          <div class="form-row actions-row"><div></div><div><button id="saveSettings" class="btn primary">Save</button></div></div>
         </div>
       </section>
     </main>
