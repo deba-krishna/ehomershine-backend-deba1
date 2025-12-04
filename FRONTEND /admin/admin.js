@@ -1,14 +1,17 @@
-// admin.js (improved) - Overwrite your existing file with this
+// admin.js (improved) - Updated with your NEW backend URL
 // IMPORTANT: Do NOT store any Supabase service_role key here. Client-side convenience password is OK.
 
-const BACKEND_BASE_DEFAULT = "https://ehomershine-backend-deba1-11.onrender.com";
+const BACKEND_BASE_DEFAULT = "https://ehomershine-backend-deba1-13.onrender.com"; 
 const BACKEND_BASE_KEY = "ehs_backend_base_v1";
 const ADMIN_HEADER_KEY = "ehs_admin_header_v1";
 const BACKEND_BASE = localStorage.getItem(BACKEND_BASE_KEY) || BACKEND_BASE_DEFAULT;
+
 const UPLOAD_ENDPOINT = BACKEND_BASE + "/api/upload";
 const PRODUCTS_ENDPOINT = BACKEND_BASE + "/api/products";
+
 const DEFAULT_X_ADMIN_SECRET = "mySuperAdmin4090";
 const X_ADMIN_SECRET = localStorage.getItem(ADMIN_HEADER_KEY) || DEFAULT_X_ADMIN_SECRET;
+
 const ADMIN_PASSWORD_CLIENT = "debaadmin4090"; // client-side convenience password
 
 /* helpers */
@@ -136,7 +139,7 @@ async function handleFiles(files){
 }
 function toBase64(file){ return new Promise((res, rej) => { const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
 
-/* UPLOAD - uses XHR to support progress updates (per-file simulated) */
+/* UPLOAD */
 uploadBtn?.addEventListener('click', async () => {
   const title = $('#title')?.value?.trim();
   const price = Number($('#price')?.value || 0);
@@ -152,11 +155,9 @@ uploadBtn?.addEventListener('click', async () => {
   uploadStatus.textContent = 'Uploading...';
   uploadBtn.disabled = true;
 
-  // Build payload
   const filesPayload = stagedFiles.map(f => ({ filename: f.name, base64: f.base64 }));
   const payload = { title, price, old_price, category, description, files: filesPayload };
 
-  // We'll POST via XHR to get upload progress showing (progress here is the full JSON body upload).
   try {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', (localStorage.getItem(BACKEND_BASE_KEY) || BACKEND_BASE_DEFAULT) + '/api/upload', true);
@@ -167,9 +168,8 @@ uploadBtn?.addEventListener('click', async () => {
       if(ev.lengthComputable){
         const percent = Math.round((ev.loaded / ev.total) * 100);
         uploadStatus.textContent = `Uploading... ${percent}%`;
-        // map overall progress into each staged file for a nicer UI
         stagedFiles.forEach((sf, idx) => {
-          sf.progress = Math.min(100, percent + idx*5); // simple distribution
+          sf.progress = Math.min(100, percent + idx*5);
         });
         renderFiles();
       }
@@ -190,11 +190,9 @@ uploadBtn?.addEventListener('click', async () => {
             }
           } catch(e) {
             uploadStatus.innerHTML = `<span style="color:${'#ff6b6b'}">Upload failed (invalid response)</span>`;
-            console.error('Invalid JSON', e, xhr.responseText);
           }
         } else {
           uploadStatus.innerHTML = `<span style="color:${'#ff6b6b'}">Server error ${xhr.status}</span>`;
-          console.error('Upload failed', xhr.responseText);
         }
         setTimeout(()=> uploadStatus.textContent = '', 4500);
       }
@@ -202,13 +200,11 @@ uploadBtn?.addEventListener('click', async () => {
 
     xhr.send(JSON.stringify(payload));
   } catch(err){
-    console.error(err);
     uploadStatus.innerHTML = `<span style="color:${'#ff6b6b'}">Server error</span>`;
     uploadBtn.disabled = false;
   }
 });
 
-/* recent list helper */
 function prependRecent(product){
   if(!product) return;
   const d = document.createElement('div'); d.className='recent-item';
@@ -216,7 +212,6 @@ function prependRecent(product){
   recentList.prepend(d);
 }
 
-/* INIT after login */
 let inited=false;
 function initOnce(){
   if(inited) return;
@@ -225,7 +220,6 @@ function initOnce(){
   $('#backendBase').value = localStorage.getItem(BACKEND_BASE_KEY) || BACKEND_BASE_DEFAULT;
   $('#adminHeaderVal').value = localStorage.getItem(ADMIN_HEADER_KEY) || DEFAULT_X_ADMIN_SECRET;
 
-  // wire settings save
   $('#saveSettings')?.addEventListener('click', () => {
     const b = $('#backendBase').value.trim();
     const h = $('#adminHeaderVal').value.trim();
@@ -242,7 +236,7 @@ async function fetchProducts(){
     const res = await fetch(base + '/api/products');
     const json = await res.json();
     return (json && json.products) ? json.products : [];
-  }catch(e){ console.error(e); return []; }
+  }catch(e){ return []; }
 }
 
 async function renderProductsTable(){
@@ -276,7 +270,7 @@ async function renderProductsTable(){
 
   target.querySelectorAll('button[data-action="edit"]').forEach(b => b.addEventListener('click', () => openEditPrompt(b.dataset.id)));
   target.querySelectorAll('button[data-action="delete"]').forEach(b => b.addEventListener('click', async () => {
-    if(!confirm('Delete this product? This will remove it from DB and attempt to delete storage files.')) return;
+    if(!confirm('Delete this product?')) return;
     await deleteProduct(b.dataset.id);
     await renderProductsTable();
   }));
@@ -303,7 +297,7 @@ async function openEditPrompt(id){
     if(!upd.ok) { alert('Update failed: '+(updJson.error||JSON.stringify(updJson))); return; }
     toast('Product updated');
     renderProductsTable();
-  }catch(err){ console.error(err); alert('Server error'); }
+  }catch(err){ alert('Server error'); }
 }
 
 async function deleteProduct(id){
@@ -314,10 +308,9 @@ async function deleteProduct(id){
     if(!res.ok) { alert('Delete failed: '+(json.error||JSON.stringify(json))); return false; }
     toast('Deleted');
     return true;
-  }catch(e){ console.error(e); alert('Server error'); return false; }
+  }catch(e){ alert('Server error'); return false; }
 }
 
-/* logout */
 $('#logoutBtn')?.addEventListener('click', () => {
   showLogin();
 });
