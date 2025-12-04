@@ -9,7 +9,7 @@ const cors = require('cors');
 // route files (ensure these exist in BACKEND/)
 const uploadRoutes = require('./upload'); // handles POST /api/upload
 const downloadRoutes = require('./download'); // handles GET /api/download/:productId
-const productsRoutes = require('./products'); // handles /api/products
+const productsRoutes = require('./product'); // handles /api/products
 
 const app = express();
 const PORT = process.env.PORT || 3000;
