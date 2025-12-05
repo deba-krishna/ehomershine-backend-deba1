@@ -276,6 +276,7 @@ body {
     display: flex;
     gap: var(--spacing-xs);
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .hero-illustration {
